@@ -4,7 +4,7 @@ var db = {
     connectionLimit : 10,
     host: 'localhost',
     user: 'root',
-    password: '123456',
+    password: '',
     database:'artist_work_dev'
 };
 

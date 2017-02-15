@@ -35,6 +35,7 @@ app.use(session({
 
 //session check
 app.use(function(req, res, next){
+    res.locals.session = req.session
     if(!req.session.user) {
         if(req.url=="/users/login"){
             next();

@@ -19,3 +19,5 @@ block content
         br
 
         button.btn.btn-lg.btn-primary.btn-block(type="submit")="Sign In"
+      if notice
+        p(style='color:red')=notice.message

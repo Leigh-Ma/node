@@ -24,7 +24,7 @@ function getBlocks(req, res, route) {
 
     var jade_res = {'/': 'blocks/index', 'index': 'blocks/_index'}[route]
 
-    mysql.DB().query("select * from blocks " + condition + " limit 10 offset ?", [page * 10],
+    mysql.DB().query("select * from blocks " + condition + " limit 20 offset ?", [page * 20],
         function(err, rows, fields){
             if (err) throw err;
             res.render(jade_res,{blocks: rows})

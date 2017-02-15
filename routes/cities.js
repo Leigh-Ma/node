@@ -18,9 +18,9 @@ function getCities(req, res, route) {
     if (city_name) {
         sql = "select * from cities where name = '" + city_name + "'";
     } else if (user_id){
-        sql = "select * from cities where creater_id = " + user_id + " limit 10 offset " + page * 10;
+        sql = "select * from cities where creater_id = " + user_id + " limit 20 offset " + page * 20;
     } else {
-        sql = "select * from cities limit 10 offset " + page * 10;
+        sql = "select * from cities limit 20 offset " + page * 20;
     }
 
     var jade_res = {'/': 'cities/index', 'index': 'cities/_index'}[route]

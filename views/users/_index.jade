@@ -1,0 +1,22 @@
+block content
+  script(src="/javascripts/user_controller.js")
+  .container-user(style="width:96%;margin:0 auto;", ng-controller='userCtrl')
+    h1 User
+    table
+      thead
+        tr
+          th ID
+          th Email
+          th Role
+          th CreatorId
+          th CreateTime
+          th App
+      tbody
+        each user in users
+          tr
+            td= user.id
+            td= user.email
+            td= user.role
+            td= user.creater_id
+            td= user.created_at
+            td= user.app_type
