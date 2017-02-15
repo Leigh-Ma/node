@@ -1,0 +1,9 @@
+
+table tbody tr:nth-child(odd)  {background-color: #ffffff;border-bottom: thin;}
+table tbody tr:nth-child(even) {background-color: #efefef;}
+
+table thead tr:nth-last-child(1) {border-bottom: solid 2px grey;}
+table tbody tr:nth-last-child(1) {border-bottom: solid 2px grey;}
+
+table tbody td {padding:4px 10px;}
+table thead th {padding:4px 10px;}

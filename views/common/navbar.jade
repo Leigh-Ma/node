@@ -1,0 +1,14 @@
+script(src='/javascripts/nav_controller.js')
+.container-fluid
+  nav.navbar.navbar-default(role='navigation')
+    .container-fluid(ng-controller='navCtrl')
+      .navbar-header
+        a(href="/").navbar-brand="Artist Work"
+
+      .collapse.navbar-collapse#bs-example-navbar-collapse-1
+        ul.nav.navbar-nav.navbar-left
+          li: a(href="/cities")="City"
+          li: a(href="/blocks")="Block"
+
+        ul.nav.navbar-nav.navbar-right
+          li: a(href="/users/login")="Login"

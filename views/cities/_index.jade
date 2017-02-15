@@ -1,0 +1,19 @@
+block content
+  script(src="/javascripts/city_controller.js")
+  .container-city(style="width:92%;margin:0 auto;", ng-controller='cityCtrl')
+    h1 City
+    table
+      thead
+        tr
+          th Name
+          th(colspan=1)
+          th ID
+      tbody
+        each city in cities
+          tr
+            td= city.name
+            td
+              button(id=city.city_id, ng-click="getCityBlocks({city_name: '#{city.name}'})")='View Block'
+            td= city.city_id
+
+

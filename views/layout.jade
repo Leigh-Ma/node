@@ -1,0 +1,12 @@
+doctype html
+html
+  head
+    title= "ArtsWork"
+    link(rel='stylesheet', href='/stylesheets/style.css', media='all', data-turbolinks-track="true")
+    link(rel='stylesheet', href='/stylesheets/common.css', media='all', data-turbolinks-track="true")
+    include common/scripts
+  body(ng-app='cityEditor')
+    include common/navbar
+    #container-body-id
+        block content
+

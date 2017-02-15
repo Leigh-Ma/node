@@ -1,0 +1,21 @@
+extends ../layout
+
+block content
+    .container(style="width:300px")
+      form.form-signin(action="/users/login" method="post")
+        h2.form-signin-heading(align='center')="Please Sign In"
+
+        label.sr-only(for="email_id")="Username"
+        input.form-control(type="text" name="email" class="form-control" placeholder="UserName" required autofocus)#email_id
+        br
+
+        label.sr-only(for="password_id")="Password"
+        input.form-control(type="password", name="password", placeholder="Password", required)#password_id
+        br
+
+        label
+          input(type="checkbox" value="remember-me")
+          = "Remember Me"
+        br
+
+        button.btn.btn-lg.btn-primary.btn-block(type="submit")="Sign In"
