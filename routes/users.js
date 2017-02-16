@@ -5,7 +5,8 @@ var mysql = require('../service/mysql');
 var lib   = require('../service/lib');
 
 router.get('/logout', function(req, res, next){
-    res.locals.session = undefined;
+    delete req.session.user;
+    delete res.locals.session;
     res.render('users/login',{notice:
         {message: 'You have logout successfully!'}
     });
@@ -21,14 +22,11 @@ router.post('/login', function (req, res, next) {
     var sql = "select * from users where email = '" + user.email + "' and password_digest = '" + user.password + "'";
     console.log(sql);
     mysql.DB().query(sql, function(err, rows, fields){
-        if(err) {
-            throw err;
-        }
+        if(err)throw err;
 
         if(rows.length > 0) {
             user = rows[0];
-            user.password_digest = undefined;
-
+            delete user.password_digest;
             req.session.user = user;
             return res.redirect('/');
         }
@@ -41,10 +39,21 @@ router.post('/login', function (req, res, next) {
 });
 
 router.get('/me', function(req, res, next){
-    res.redirect('/')
+    req.query.user_id = lib.currentUser(res).id;
+    getUsers('/me', req, res)
 });
 
 router.get('/', function(req, res, next){
+    getUsers('/', req, res)
+});
+
+router.get('/index', function(req, res, next){
+    getUsers('/index', req, res)
+});
+
+module.exports = router;
+
+function getUsers(route, req, res) {
     var params = req.query;
     var creator_id = lib.currentUser(res).id;
     var sql = "select * from users where creater_id = " + creator_id;
@@ -57,13 +66,12 @@ router.get('/', function(req, res, next){
         sql = sql + " and role = '" + params.email + "'";
     }
 
+    var jade_res = {'/': 'users/index', '/me':'users/index', '/index': 'users/_index'};
+
     mysql.DB().query(sql, function(err, rows){
         if(err){
             throw err;
         }
-        res.render('users/index', {users: rows})
+        res.render(jade_res[route]||'users/index', {users: rows})
     });
-
-});
-
-module.exports = router;
+}

@@ -5,34 +5,42 @@ var mysql = require('../service/mysql')
 
 /* GET city listing. */
 
+function queryCondition(params) {
+    if (params['name']) {
+        return {
+            where: "where name = '" + params['name'] + "'",
+            limit: false
+        }
+    }
+
+    if (params['city_name']) {
+        return {
+            where: "where city_name = '" + params['city_name'] + "'",
+            limit: true
+        }
+    }
+
+    if (params['user_id']) {
+        return {
+            where: "where user_id = " + params['user_id'],
+            limit: true
+        }
+    }
+
+    return {where: '', limit: true}
+}
+
 function getBlocks(req, res, route) {
     var params = req.query;
 
+    var view = {'/': 'blocks/index', 'index': 'blocks/_index'}[route];
     console.log(JSON.stringify(params));
 
-    var city_name = params['city_name']
-    var page = params['page']
-    var condition = '';
-
-    if (city_name != undefined) {
-        condition = "where city_name = '" + city_name + "'";
-    }
-
-    if (page == undefined) {
-        page = 0;
-    }
-
-    var jade_res = {'/': 'blocks/index', 'index': 'blocks/_index'}[route]
-
-    mysql.DB().query("select * from blocks " + condition + " limit 20 offset ?", [page * 20],
-        function(err, rows, fields){
-            if (err) throw err;
-            res.render(jade_res,{blocks: rows})
-        });
+    mysql.pagination('blocks', view, res, params, queryCondition);
 }
 
 router.get('/', function(req, res, next){
-   getBlocks(req, res, '/')
+    getBlocks(req, res, '/')
 });
 
 router.get('/index', function(req, res, next){

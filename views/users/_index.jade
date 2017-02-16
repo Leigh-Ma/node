@@ -13,10 +13,11 @@ block content
           th App
       tbody
         each user in users
+          -var created_at = new Date(user.created_at)
           tr
             td= user.id
             td= user.email
             td= user.role
             td= user.creater_id
-            td= user.created_at
+            td= created_at.toLocaleString()
             td= user.app_type

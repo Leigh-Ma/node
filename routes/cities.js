@@ -4,16 +4,14 @@ var router = express.Router();
 var mysql = require('../service/mysql');
 
 /* GET city listing. */
-function getCities(req, res, route) {
+function getCities(route, req, res) {
     var params = req.query;
     var city_name = params['city_name'];
     var user_id = params['creator_id'];
     var page = params['page'];
     var sql = '';
 
-    if (!page) {
-        page = 0;
-    }
+    page = page || 0;
 
     if (city_name) {
         sql = "select * from cities where name = '" + city_name + "'";
@@ -33,11 +31,11 @@ function getCities(req, res, route) {
 
 
 router.get('/', function(req, res, next){
-    getCities(req, res, '/')
+    getCities('/', req, res)
 });
 
 router.get('/index', function(req, res, next){
-    getCities(req, res, 'index')
+    getCities('index', req, res)
 });
 
 module.exports = router;

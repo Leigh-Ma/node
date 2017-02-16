@@ -8,8 +8,8 @@ script(src='/javascripts/nav_controller.js')
       .collapse.navbar-collapse#bs-example-navbar-collapse-1
         ul.nav.navbar-nav.navbar-left
           -var user;
-          -if(locals.session)
-            -user = locals.session.user
+          -if(session)
+            -user = session.user
           if user
             li: a(href="/cities")="City"
             li: a(href="/blocks")="Block"
@@ -17,8 +17,8 @@ script(src='/javascripts/nav_controller.js')
               li: a(href='/users')="User"
 
         ul.nav.navbar-nav.navbar-right
-          if locals.session && locals.session.user
-            li: a(href="/users/me")=locals.session.user.email
+          if user
+            li: a(href="/users/me")=user.email
             li: a(href="/users/logout")="Logout"
           else
             li: a(href="/users/login")="Login"

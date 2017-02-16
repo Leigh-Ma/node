@@ -9,8 +9,9 @@ block content
           th CityName
           th Status
       tbody
-        each block in blocks
+        each block in rows
           tr
             td= block.name
             td= block.city_name
-            td= block.status
+            td(class=block.status)= block.status
+    include ../common/pagination
