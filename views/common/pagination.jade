@@ -1,0 +1,19 @@
+mixin pageLink(table, page, current)
+ -var link = '/' + table + '?page=' + page;
+ -if(current == page) {
+    li: a(class='active')= page + 1
+ -}else{
+    li: a(href= link)= page + 1
+ -}
+
+mixin pageBody
+  -for(var i = beginPage; i<= endPage; i++)
+    +pageLink(table, i, page)
+
+
+
+-if(endPage > beginPage){
+  ul.pagination
+    +pageBody
+-}
+
