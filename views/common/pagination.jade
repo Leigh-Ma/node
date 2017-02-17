@@ -1,19 +1,39 @@
-mixin pageLink(table, page, current)
- -var link = '/' + table + '?page=' + page;
- -if(current == page) {
-    li: a(class='active')= page + 1
- -}else{
-    li: a(href= link)= page + 1
- -}
+-var filterString = ''
+- for(var key in params)
+-   if(key && key != 'page') filterString = filterString + '&'+key+'='+params[key]
+
+mixin pageLink(i)
+ -var link = '/' + table + '?page=' + i + filterString
+  if page == i
+    li
+      a(class='active')
+        b= i + 1
+  else
+    li: a(href= link)= i + 1
+
 
 mixin pageBody
   -for(var i = beginPage; i<= endPage; i++)
-    +pageLink(table, i, page)
+    +pageLink(i)
+
+mixin pageHead
+  if beginPage > 0
+    +pageLink(0)
+  if beginPage > 1
+    +pageLink(1)
+    li: a(href='#') ...
+
+mixin pageTail
+  if totalPage - endPage > 5
+      li: a(href='#') ...
+      +pageLink(totalPage-2)
+      +pageLink(totalPage-1)
 
 
-
--if(endPage > beginPage){
+if totalPage > 1
   ul.pagination
+    +pageHead
     +pageBody
--}
+    +pageTail
+
 

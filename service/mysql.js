@@ -23,26 +23,19 @@ module.exports.pagination = function(table, view, res, params, conditionCb){
     pool.query(sqlNumRow(table, params, conditionCb)).then(function(result){
         dbRes.totalRow = result[0]['numRow'];
         dbRes.totalPage= Math.ceil(dbRes.totalRow/dbRes.limit);
-
     }).then(function() {
-        pool.query(sqlQuery(table, params, dbRes, conditionCb)).then(function (result) {
-            pageCurrent(dbRes);
-            console.log('pagination: ', JSON.stringify(dbRes));
-            dbRes.rows = result;
-            if (dbRes.page < dbRes.totalPage) {
-            } else {
-                err: 'query page error, exceed max page'
-            }
+        return pool.query(sqlQuery(table, params, dbRes, conditionCb))
+    }).then(function (result) {
+        pageCurrent(dbRes);
+        console.log('pagination: ', JSON.stringify(dbRes));
+        dbRes.rows = result;
+        if (dbRes.page < dbRes.totalPage) {
+        } else {
+            err: 'query page error, exceed max page'
+        }
 
-
-            res.render(view, dbRes)
-
-        }).catch(function (err) {
-            console.error(err);
-            dbRes.notice = {message: err};
-            res.render(view, dbRes)
-
-        })
+        dbRes.params = params;
+        res.render(view, dbRes)
     }).catch(function (err) {
         console.error(err);
         dbRes.notice = {message: err};
@@ -69,18 +62,9 @@ function sqlNumRow(table, params, conditionCb) {
 }
 
 function pageCurrent(dbRes) {
-    var beginPage, endPage;
-    var current = dbRes.page;
+    var midPage = parseInt(dbRes.page, 10);
 
-    beginPage = current - 5;
-    if(beginPage < 0) {
-        beginPage = 0;
-    }
-
-    endPage = beginPage + 9;
-    if(endPage >= dbRes.totalPage)
-        endPage = dbRes.totalPage - 1;
-
-    dbRes.beginPage = beginPage;
-    dbRes.endPage = endPage;
+    dbRes.beginPage = Math.max(midPage - 4, 0);
+    dbRes.endPage   = Math.min(dbRes.beginPage + 8, dbRes.totalPage - 1);
+    dbRes.beginPage = Math.max(dbRes.endPage - 8, 0)
 }

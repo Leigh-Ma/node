@@ -3,30 +3,32 @@ var router = express.Router();
 
 var mysql = require('../service/mysql');
 
+var lib   = require('../service/lib');
+
 /* GET city listing. */
+
+function queryCondition(params) {
+    var condition = {where: '', limit: true};
+
+    if (params.city_name) {
+        condition.where = "where name = '" + params.city_name + "'";
+        condition.limit = false;
+    } else if (params.creator_id && params.myRole != 'root') {
+        condition.where = "where create_user_id = " + params.creator_id;
+    }
+    return condition
+}
+
 function getCities(route, req, res) {
     var params = req.query;
-    var city_name = params['city_name'];
-    var user_id = params['creator_id'];
-    var page = params['page'];
-    var sql = '';
+    var view = {'/': 'cities/index', 'index': 'cities/_index'}[route];
 
-    page = page || 0;
+    params.myRole = lib.currentUser(res).role;
+    params.creator_id = lib.currentUser(res).id;
+    
+    console.log(JSON.stringify(params));
 
-    if (city_name) {
-        sql = "select * from cities where name = '" + city_name + "'";
-    } else if (user_id){
-        sql = "select * from cities where creater_id = " + user_id + " limit 20 offset " + page * 20;
-    } else {
-        sql = "select * from cities limit 20 offset " + page * 20;
-    }
-
-    var jade_res = {'/': 'cities/index', 'index': 'cities/_index'}[route]
-
-    mysql.DB().query(sql, function(err, rows){
-        if (err) throw err;
-        res.render(jade_res,{cities: rows})
-    });
+    mysql.pagination('cities', view, res, params, queryCondition);
 }
 
 

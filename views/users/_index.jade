@@ -12,7 +12,7 @@ block content
           th CreateTime
           th App
       tbody
-        each user in users
+        each user in rows
           -var created_at = new Date(user.created_at)
           tr
             td= user.id
@@ -21,3 +21,5 @@ block content
             td= user.creater_id
             td= created_at.toLocaleString()
             td= user.app_type
+
+    include ../common/pagination

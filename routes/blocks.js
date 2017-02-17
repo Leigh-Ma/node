@@ -31,11 +31,11 @@ function queryCondition(params) {
 }
 
 function getBlocks(req, res, route) {
-    var params = req.query;
-
     var view = {'/': 'blocks/index', 'index': 'blocks/_index'}[route];
+    var params = req.query;
+    
     console.log(JSON.stringify(params));
-
+    
     mysql.pagination('blocks', view, res, params, queryCondition);
 }
 

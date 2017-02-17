@@ -12,6 +12,7 @@ var users = require('./routes/users');
 var cities = require('./routes/cities');
 var blocks = require('./routes/blocks');
 
+
 var app = express();
 
 // view engine setup
@@ -35,7 +36,7 @@ app.use(session({
 
 //session check
 app.use(function(req, res, next){
-    res.locals.session = req.session
+    res.locals.session = req.session;
     if(!req.session.user) {
         if(req.url=="/users/login"){
             next();

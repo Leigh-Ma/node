@@ -53,25 +53,39 @@ router.get('/index', function(req, res, next){
 
 module.exports = router;
 
-function getUsers(route, req, res) {
-    var params = req.query;
-    var creator_id = lib.currentUser(res).id;
-    var sql = "select * from users where creater_id = " + creator_id;
+function queryCondition(params) {
+    var condition = {where:''};
+    var more = ' and ';
 
     if(params.user_id) {
-        sql = "select * from users where id = " + params.user_id;
-    } else if (params.email) {
-        sql = sql + " and email like '" + params.email + "%'";
-    } else if (params.role) {
-        sql = sql + " and role = '" + params.email + "'";
+        condition.where = "where id = " + params.user_id;
+        condition.limit = false;
+        return condition;
     }
 
-    var jade_res = {'/': 'users/index', '/me':'users/index', '/index': 'users/_index'};
+    if (params.myRole != 'root') {
+        condition.where = "where creater_id = " + params.creator_id;
+    } else {
+        more = ' where ';
+    }
 
-    mysql.DB().query(sql, function(err, rows){
-        if(err){
-            throw err;
-        }
-        res.render(jade_res[route]||'users/index', {users: rows})
-    });
+    if (params.email) {
+        condition.where = condition.where + more + "email like '" + params.email + "%'";
+    } else if (params.role) {
+        condition.where = condition.where + more + "role = '" + params.email + "'";
+    }
+
+    condition.limit = true;
+
+    return condition
+}
+function getUsers(route, req, res) {
+    var params = req.query;
+    params.myRole = lib.currentUser(res).role;
+    params.creator_id = lib.currentUser(res).id;
+
+    var view = {'/': 'users/index', '/me':'users/index', '/index': 'users/_index'}[route];
+    console.log(JSON.stringify(params));
+
+    mysql.pagination('users', view, res, params, queryCondition);
 }

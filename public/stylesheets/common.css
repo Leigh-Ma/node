@@ -1,4 +1,4 @@
-table {width: 100%}
+table {width: 96%}
 table tbody tr:nth-child(odd)  {background-color: #ffffff;border-bottom: thin;}
 table tbody tr:nth-child(even) {background-color: #efefef;}
 
@@ -7,4 +7,6 @@ table tbody tr:nth-last-child(1) {border-bottom: solid 2px grey;}
 
 table tbody td {padding:4px 10px;}
 table thead th {padding:4px 10px;}
-.pre_approved {background-color:#428bca;width: 80px}
+.pre_approved {background-color: #428bca;width: 80px}
+.review       {background-color: yellow; width: 80px}
+.present      {background-color: #4cae4c;width: 80px}
